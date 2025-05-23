@@ -1,5 +1,5 @@
-import LoginPage from '../../pageObjects/LoginPage'
-import InventoryPage from '../../pageObjects/InventoryPage'
+import LoginPage from '../../pages/LoginPage'
+import InventoryPage from '../../pages/InventoryPage'
 
 const loginPage = new LoginPage()
 const inventoryPage = new InventoryPage()
@@ -12,17 +12,15 @@ describe('Product Page Tests (POM)', () => {
   })
 
   it('Displays all products correctly', () => {
-    cy.get('.inventory_item').should('have.length', 6)
-    cy.get('.inventory_item').each(($el) => {
-      cy.wrap($el).find('.inventory_item_name').should('be.visible')
-      cy.wrap($el).find('.inventory_item_price').should('be.visible')
-    })
+    inventoryPage.verifyProductCount(6)
+    inventoryPage.verifyProductDetails()
   })
 
   it('Sorts products by price - low to high', () => {
     inventoryPage.sortBy('lohi')
 
     let prices = []
+
     inventoryPage.getPrices().each(($el) => {
       prices.push(parseFloat($el.text().replace('$', '')))
     }).then(() => {

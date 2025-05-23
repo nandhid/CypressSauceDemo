@@ -1,5 +1,5 @@
-import LoginPage from '../../pageObjects/LoginPage'
-import InventoryPage from '../../pageObjects/InventoryPage'
+import LoginPage from '../../pages/LoginPage'
+import InventoryPage from '../../pages/InventoryPage'
 
 const loginPage = new LoginPage()
 const inventoryPage = new InventoryPage()

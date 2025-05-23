@@ -1,7 +1,7 @@
-import LoginPage from '../../pageObjects/LoginPage'
-import InventoryPage from '../../pageObjects/InventoryPage'
-import CartPage from '../../pageObjects/CartPage'
-import CheckoutPage from '../../pageObjects/CheckoutPage'
+import LoginPage from '../../pages/LoginPage'
+import InventoryPage from '../../pages/InventoryPage'
+import CartPage from '../../pages/CartPage'
+import CheckoutPage from '../../pages/CheckoutPage'
 
 const loginPage = new LoginPage()
 const inventoryPage = new InventoryPage()
