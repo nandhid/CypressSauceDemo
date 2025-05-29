@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     // Optional: ensure correct Node version via nvm or toolchain
-    PATH = "/usr/local/bin:$PATH"
+    PATH = "/Users/nandhinidevaraj/.nvm/versions/node/v20.19.2/bin:/usr/local/bin:$PATH"
   }
 
   stages {
