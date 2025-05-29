@@ -2,14 +2,16 @@ pipeline {
   agent any
 
   environment {
-    // Optional: ensure correct Node version via nvm or toolchain
-    PATH = "/Users/nandhinidevaraj/.nvm/versions/node/v20.19.2/bin:/usr/local/bin:$PATH"
+    // Correct path to your Node.js binary (not just npm)
+    NODE_BIN = "/Users/nandhinidevaraj/.nvm/versions/node/v20.19.2/bin"
+    PATH = "${NODE_BIN}:${PATH}"
   }
 
   stages {
     stage('Checkout Code') {
       steps {
-        git url: 'https://github.com/nandhid/CypressSauceDemo.git', branch: 'main'
+        git credentialsId: 'e9d56be8-412a-41a2-90e3-7cc3b27817f9',
+            url: 'https://github.com/nandhid/CypressSauceDemo.git'
       }
     }
 
@@ -21,37 +23,32 @@ pipeline {
 
     stage('Run Tests and Generate Reports') {
       steps {
-        sh './run-tests.sh'
+        sh 'chmod +x run-tests.sh && ./run-tests.sh'
       }
     }
 
     stage('Archive Mochawesome Report') {
-  steps {
-    archiveArtifacts artifacts: 'mochawesome-report/*.html', allowEmptyArchive: true
-    publishHTML([
-      allowMissing: false,
-      alwaysLinkToLastBuild: true,
-      keepAll: true,
-      reportDir: 'mochawesome-report',
-      reportFiles: 'mochawesome.html',
-      reportName: 'Mochawesome Report'
-    ])
-  }
-}
+      steps {
+        archiveArtifacts artifacts: 'mochawesome-report/mochawesome.html', allowEmptyArchive: true
+      }
+    }
 
     stage('Archive Allure Report') {
       steps {
-        archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
+        allure includeProperties: false,
+               jdk: '',
+               reportBuildPolicy: 'ALWAYS',
+               results: [[path: 'allure-results']]
       }
     }
   }
 
   post {
-    always {
-      echo '✅ Build completed'
+    success {
+      echo '✅ Build succeeded.'
     }
     failure {
-      echo '❌ Build failed'
+      echo '❌ Build failed.'
     }
   }
 }
