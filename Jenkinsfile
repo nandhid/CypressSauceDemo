@@ -2,13 +2,14 @@ pipeline {
   agent any
 
   environment {
-    CYPRESS_CACHE_FOLDER = "${WORKSPACE}/.cache/Cypress"
+    // Optional: ensure correct Node version via nvm or toolchain
+    PATH = "/usr/local/bin:$PATH"
   }
 
   stages {
-    stage('Checkout') {
+    stage('Checkout Code') {
       steps {
-        git branch: 'main', url: 'https://github.com/nandhid/CypressSauceDemo.git'
+        git url: 'https://github.com/nandhid/CypressSauceDemo.git', branch: 'main'
       }
     }
 
@@ -18,47 +19,38 @@ pipeline {
       }
     }
 
-    stage('Run Cypress Tests') {
+    stage('Run Tests and Generate Reports') {
       steps {
-        sh 'npm run test'
+        sh './run-tests.sh'
       }
     }
 
-    stage('Generate Mochawesome Report') {
+    stage('Archive Mochawesome Report') {
       steps {
-        sh 'npm run report'
-      }
-    }
-
-    stage('Publish HTML Report') {
-      steps {
-        publishHTML(target: [
-          allowMissing: false,
+        archiveArtifacts artifacts: 'mochawesome-report/*.html', allowEmptyArchive: true
+        publishHTML([
+          reportDir: 'mochawesome-report',
+          reportFiles: 'mochawesome.html',
+          reportName: 'Mochawesome Report',
           alwaysLinkToLastBuild: true,
-          keepAll: true,
-          reportDir: 'cypress/reports/html',
-          reportFiles: 'index.html',
-          reportName: 'Mochawesome Report'
+          keepAll: true
         ])
       }
     }
 
-    stage('Generate Allure Report') {
+    stage('Archive Allure Report') {
       steps {
-        sh 'npm run allure:generate'
-      }
-    }
-
-    stage('Publish Allure Report') {
-      steps {
-        allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+        archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
       }
     }
   }
 
   post {
     always {
-      archiveArtifacts artifacts: '**/reports/**', fingerprint: true
+      echo '✅ Build completed'
+    }
+    failure {
+      echo '❌ Build failed'
     }
   }
 }
