@@ -11,7 +11,7 @@ pipeline {
     stage('Checkout Code') {
       steps {
         git credentialsId: 'e9d56be8-412a-41a2-90e3-7cc3b27817f9',
-            url: 'https://github.com/nandhid/CypressSauceDemo.git'
+            url: 'https://github.com/nandhid/CypressSauceDemo.git', branch: 'main'
       }
     }
 
