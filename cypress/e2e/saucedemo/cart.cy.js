@@ -6,17 +6,14 @@ const loginPage = new LoginPage()
 const inventoryPage = new InventoryPage()
 const cartPage = new CartPage()
 
-describe('Cart Functionality Tests (POM)', () => {
-
-  beforeEach(() => {
+describe('Cart Page Tests (POM)', () => {
+  // Add product to cart and validate cart state
+  it('Adds item to cart and verifies cart count', () => {
     loginPage.login('standard_user', 'secret_sauce')
     inventoryPage.addToCart('sauce-labs-backpack')
     inventoryPage.openCart()
-  })
-
-  it('Verifies cart contains 1 item', () => {
+    cartPage.verifyCartPageVisible()
     cartPage.verifyCartHasItems(1)
     cartPage.verifyItemName('Sauce Labs Backpack')
   })
-
 })

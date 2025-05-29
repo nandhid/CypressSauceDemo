@@ -3,10 +3,23 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "rm -rf mochawesome-report allure-report allure-results cypress/reports/mochawesome",
+    "test": "cypress run && npm run posttest",
+    "posttest": "npm run report && npm run allure:generate",
+    "report": "npx mochawesome-merge cypress/reports/mochawesome/*.json | npx mochawesome-report-generator --reportDir mochawesome-report",
+    "report:open": "open mochawesome-report/mochawesome.html",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@shelex/cypress-allure-plugin": "^2.41.2",
+    "cypress": "^14.4.0",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.4.1",
+    "mochawesome-report-generator": "^6.2.0"
+  }
 }

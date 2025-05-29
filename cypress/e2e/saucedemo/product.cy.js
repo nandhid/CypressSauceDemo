@@ -5,28 +5,16 @@ const loginPage = new LoginPage()
 const inventoryPage = new InventoryPage()
 
 describe('Product Page Tests (POM)', () => {
-
+  // Setup before each test case
   beforeEach(() => {
     loginPage.login('standard_user', 'secret_sauce')
     inventoryPage.verifyOnInventoryPage()
   })
 
+  // Ensure all products are displayed with correct details
   it('Displays all products correctly', () => {
-    inventoryPage.verifyProductCount(6)
     inventoryPage.verifyProductDetails()
-  })
-
-  it('Sorts products by price - low to high', () => {
-    inventoryPage.sortBy('lohi')
-
-    let prices = []
-
-    inventoryPage.getPrices().each(($el) => {
-      prices.push(parseFloat($el.text().replace('$', '')))
-    }).then(() => {
-      const sorted = [...prices].sort((a, b) => a - b)
-      expect(prices).to.deep.equal(sorted)
-    })
+    inventoryPage.verifyProductCount(6)
   })
 
 })

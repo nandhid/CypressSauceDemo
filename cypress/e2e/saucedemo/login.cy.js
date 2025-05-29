@@ -4,23 +4,19 @@ import InventoryPage from '../../pages/InventoryPage'
 const loginPage = new LoginPage()
 const inventoryPage = new InventoryPage()
 
-describe('Login Tests (POM)', () => {
-
-  it('Logs in successfully with valid credentials', () => {
-    // Input: Valid credentials
-    // Output: Redirects to inventory page
+describe('Login Page Tests (POM)', () => {
+  // Positive login scenario
+  it('should login successfully with valid credentials', () => {
     loginPage.login('standard_user', 'secret_sauce')
     inventoryPage.verifyOnInventoryPage()
   })
 
-  it('Fails to login with invalid credentials', () => {
-    // Input: Invalid credentials
-    // Output: Error message displayed
+  // Negative login scenario with invalid credentials
+  it('should display error for invalid login', () => {
     loginPage.visit()
     loginPage.enterUsername('invalid_user')
     loginPage.enterPassword('invalid_pass')
     loginPage.submit()
     loginPage.verifyLoginError()
   })
-
 })

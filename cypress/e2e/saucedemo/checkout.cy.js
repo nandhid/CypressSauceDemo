@@ -8,8 +8,8 @@ const inventoryPage = new InventoryPage()
 const cartPage = new CartPage()
 const checkoutPage = new CheckoutPage()
 
-describe('Checkout Flow Tests (POM)', () => {
-
+describe('Checkout Tests (POM)', () => {
+  // Prepare cart and start checkout before each test
   beforeEach(() => {
     loginPage.login('standard_user', 'secret_sauce')
     inventoryPage.addToCart('sauce-labs-backpack')
@@ -17,7 +17,8 @@ describe('Checkout Flow Tests (POM)', () => {
     cartPage.clickCheckout()
   })
 
-  it('Completes checkout with valid information', () => {
+  // Full successful checkout flow
+  it('Completes checkout with valid data', () => {
     checkoutPage.enterInformation('John', 'Doe', '12345')
     checkoutPage.clickContinue()
     checkoutPage.verifySummaryPage()
@@ -25,9 +26,9 @@ describe('Checkout Flow Tests (POM)', () => {
     checkoutPage.verifyConfirmation()
   })
 
-  it('Shows error when required fields are missing', () => {
+  // Attempt checkout with missing fields
+  it('Shows error for missing checkout info', () => {
     checkoutPage.clickContinue()
     checkoutPage.verifyError()
   })
-
 })
