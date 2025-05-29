@@ -26,17 +26,18 @@ pipeline {
     }
 
     stage('Archive Mochawesome Report') {
-      steps {
-        archiveArtifacts artifacts: 'mochawesome-report/*.html', allowEmptyArchive: true
-        publishHTML([
-          reportDir: 'mochawesome-report',
-          reportFiles: 'mochawesome.html',
-          reportName: 'Mochawesome Report',
-          alwaysLinkToLastBuild: true,
-          keepAll: true
-        ])
-      }
-    }
+  steps {
+    archiveArtifacts artifacts: 'mochawesome-report/*.html', allowEmptyArchive: true
+    publishHTML([
+      allowMissing: false,
+      alwaysLinkToLastBuild: true,
+      keepAll: true,
+      reportDir: 'mochawesome-report',
+      reportFiles: 'mochawesome.html',
+      reportName: 'Mochawesome Report'
+    ])
+  }
+}
 
     stage('Archive Allure Report') {
       steps {
